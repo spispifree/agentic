@@ -34,11 +34,15 @@ else
     echo "✅ GitHub CLI가 이미 설치되어 있습니다. (버전: $(gh --version | head -n 1))"
 fi
 
-# ====== 프로젝트명 인자/입력 처리 ======
+# ====== 프로젝트명 인자 처리 ======
 if [ -z "$1" ]; then
-    echo "내 GitHub에 생성할 새 프로젝트명을 입력하세요: "
-    read PROJECT_NAME
-    [ -z "$PROJECT_NAME" ] && handle_error "프로젝트명이 입력되지 않았습니다."
+    # stdin에서 프로젝트명을 읽으려고 시도
+    if [ -t 0 ]; then
+        handle_error "프로젝트명이 제공되지 않았습니다. 인자로 전달하거나 stdin으로 파이프해주세요."
+    else
+        read PROJECT_NAME
+        [ -z "$PROJECT_NAME" ] && handle_error "프로젝트명이 입력되지 않았습니다."
+    fi
 else
     PROJECT_NAME="$1"
 fi
@@ -157,53 +161,15 @@ delete_github_repo() {
 # ====== 내 GitHub에 동일한 리포지토리 존재 여부 확인 및 처리 ======
 if gh repo view "$GITHUB_USERNAME/$PROJECT_NAME" &>/dev/null; then
     echo "⚠️ 내 GitHub에 '$PROJECT_NAME' 리포지토리가 이미 존재합니다."
-    echo "1) 기존 GitHub 리포지토리 삭제 후 계속 진행"
-    echo "2) 다른 프로젝트명으로 다시 시작"
-    echo "3) 스크립트 종료"
-    read -p "선택해주세요 (1/2/3): " repo_choice
-    case $repo_choice in
-        1)
-        echo "기존 GitHub 리포지토리를 삭제합니다..."
-        gh repo delete "$GITHUB_USERNAME/$PROJECT_NAME" --yes || handle_error "리포지토리 삭제에 실패했습니다."
-        ;;
-    2)
-        echo "스크립트를 다시 실행해주세요."
-        exit 0
-        ;;
-    3)
-        echo "스크립트를 종료합니다."
-        exit 0
-        ;;
-    *)
-        handle_error "잘못된 선택입니다."
-        ;;
-    esac
+    echo "자동으로 기존 리포지토리를 삭제하고 계속 진행합니다..."
+    delete_github_repo "$PROJECT_NAME" || handle_error "기존 리포지토리 삭제에 실패했습니다."
 fi
 
 # ====== 로컬 폴더 존재 여부 확인 및 처리 ======
 if [ -d "$TARGET_BASE_DIR/$PROJECT_NAME" ]; then
     echo "⚠️ '$TARGET_BASE_DIR/$PROJECT_NAME' 폴더가 이미 존재합니다."
-    echo "1) 기존 폴더 삭제 후 계속 진행"
-    echo "2) 다른 프로젝트명으로 다시 시작"
-    echo "3) 스크립트 종료"
-    read -p "선택해주세요 (1/2/3): " folder_choice
-    case $folder_choice in
-        1)
-            echo "기존 폴더를 삭제합니다..."
-            rm -rf "$TARGET_BASE_DIR/$PROJECT_NAME"
-                ;;
-            2)
-                echo "스크립트를 다시 실행해주세요."
-                exit 0
-                ;;
-            3)
-                echo "스크립트를 종료합니다."
-                exit 0
-                ;;
-        *)
-            handle_error "잘못된 선택입니다."
-            ;;
-    esac
+    echo "자동으로 기존 폴더를 삭제하고 계속 진행합니다..."
+    rm -rf "$TARGET_BASE_DIR/$PROJECT_NAME" || handle_error "기존 폴더 삭제에 실패했습니다."
 fi
 
 # ====== 소스 디렉토리에서 최신 소스 가져오기 ======

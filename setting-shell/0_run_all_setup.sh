@@ -21,12 +21,14 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET_BASE_DIR="$HOME/workspace/project"
 cd "$SCRIPT_DIR" || handle_error "스크립트 디렉토리로 이동 실패"
 
-# 1. 프로젝트명 입력 및 전체 경로 변수 설정
-read -p "생성할 프로젝트명을 입력하세요: " PROJECT_NAME
+# 1. 프로젝트명 설정 (기본값 또는 매개변수 사용)
+PROJECT_NAME=${1:-"smart-ai-coder"}
 
 if [ -z "$PROJECT_NAME" ]; then
-    handle_error "프로젝트명이 입력되지 않았습니다."
+    handle_error "프로젝트명이 설정되지 않았습니다."
 fi
+
+echo "프로젝트명: $PROJECT_NAME"
 
 # 프로젝트 디렉토리 경로 설정
 PROJECT_DIR="$TARGET_BASE_DIR/$PROJECT_NAME"
