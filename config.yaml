@@ -1,0 +1,96 @@
+# Smart AI Coder 설정
+project:
+  name: "my-project"
+  description: "내 소스코드 활용 + AI 보완 시스템"
+  base_path: "./src"
+  
+# 기술 스택 설정
+tech_stack:
+  frontend:
+    - "vue.js"
+    - "react"
+    - "html/css/js"
+  backend:
+    - "spring-boot"
+    - "node.js"
+    - "python-flask"
+  database:
+    - "mysql"
+    - "postgresql" 
+    - "mongodb"
+  
+# AI 모델 설정
+ai:
+  # 로컬 모델 (무료)
+  local:
+    provider: "ollama"
+    model: "deepseek-coder:6.7b"
+    endpoint: "http://localhost:11434"
+    
+  # 클라우드 모델 (유료 but 고성능)
+  cloud:
+    provider: "openai"  # or "anthropic"
+    model: "gpt-4o"
+    api_key: "${OPENAI_API_KEY}"  # 환경변수에서 가져옴
+    
+  # 기본 사용 모델
+  default: "cloud"  # local 또는 cloud
+  max_tokens: 4096
+  temperature: 0.1
+
+# 코드 검색 설정
+search:
+  # 검색할 파일 확장자
+  file_extensions:
+    - ".java"
+    - ".py" 
+    - ".js"
+    - ".vue"
+    - ".ts"
+    - ".tsx"
+    - ".sql"
+  
+  # 제외할 디렉토리
+  exclude_dirs:
+    - "node_modules"
+    - ".git"
+    - "target"
+    - "build"
+    - "__pycache__"
+    - ".vscode"
+    
+# 알림 설정  
+notifications:
+  telegram:
+    enabled: true
+    bot_token: "${TELEGRAM_BOT_TOKEN}"
+    chat_id: "${TELEGRAM_CHAT_ID}"
+    
+  email:
+    enabled: false
+    smtp_server: "smtp.gmail.com"
+    smtp_port: 587
+    username: "${EMAIL_USERNAME}"
+    password: "${EMAIL_PASSWORD}"
+    
+# 작업 흐름 설정
+workflow:
+  # 작업 전 백업 생성
+  backup_before_changes: true
+  
+  # 코드 생성 후 자동 테스트 실행
+  run_tests_after_generation: true
+  
+  # Git 커밋 자동화
+  auto_commit: true
+  commit_message_template: "🤖 AI Generated: {task_description}"
+  
+  # 생성된 코드 검토 단계
+  code_review_enabled: true
+  
+# 로깅 설정
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  file: "logs/ai_coder.log"
+  max_file_size: "10MB"
+  backup_count: 5

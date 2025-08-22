@@ -1,0 +1,22 @@
+# Smart AI Coder 필수 패키지
+
+# 코어 의존성
+PyYAML>=6.0
+requests>=2.28.0
+
+# 로깅 및 유틸리티 
+pathlib2>=2.3.0; python_version < "3.4"
+
+# 선택적 의존성 (고급 기능용)
+# 벡터 검색을 위한 임베딩 (선택사항)
+# sentence-transformers>=2.0.0
+# faiss-cpu>=1.7.0
+
+# 코드 분석용 (선택사항)
+# tree-sitter>=0.20.0
+# tree-sitter-python>=0.20.0
+# tree-sitter-javascript>=0.20.0
+
+# 웹 스크래핑용 (선택사항)
+# beautifulsoup4>=4.11.0
+# selenium>=4.0.0
