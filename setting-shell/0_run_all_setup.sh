@@ -22,7 +22,7 @@ TARGET_BASE_DIR="$HOME/workspace/project"
 cd "$SCRIPT_DIR" || handle_error "스크립트 디렉토리로 이동 실패"
 
 # 1. 프로젝트명 설정 (기본값 또는 매개변수 사용)
-PROJECT_NAME=${1:-"smart-ai-coder"}
+PROJECT_NAME=${1:-"project-test"}
 
 if [ -z "$PROJECT_NAME" ]; then
     handle_error "프로젝트명이 설정되지 않았습니다."
